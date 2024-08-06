@@ -1,0 +1,391 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Apr 30, 2024 at 05:48 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `reglog`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `audio_records`
+--
+
+CREATE TABLE `audio_records` (
+  `id` int(11) NOT NULL,
+  `audio_name` varchar(100) NOT NULL,
+  `audio_path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `audio_records`
+--
+
+INSERT INTO `audio_records` (`id`, `audio_name`, `audio_path`) VALUES
+(1, '64ca9a209fa36.webm', 'audio_uploads/64ca9a209fa36.webm'),
+(2, '64cb40db95799.webm', 'audio_uploads/64cb40db95799.webm');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chat_messages`
+--
+
+CREATE TABLE `chat_messages` (
+  `message_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `timestamp` datetime NOT NULL,
+  `note_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `chat_messages`
+--
+
+INSERT INTO `chat_messages` (`message_id`, `message`, `timestamp`, `note_id`) VALUES
+(1, 'hi', '2023-07-22 07:27:42', 3),
+(2, 'notestoself', '2023-08-03 09:13:22', 4),
+(7, 'referring to a person or thing previously mentioned or easily identified: pronoun', '2023-08-03 09:43:49', 6),
+(9, 'hi anusha', '2023-07-29 20:40:40', 7),
+(12, 'a joke or story: informal', '2023-08-03 09:43:22', 6),
+(17, 'the same; identical:', '2023-08-03 09:43:03', 6),
+(19, 'the lowest cardinal number; half of two;', '2023-08-03 09:42:52', 6),
+(29, 'This chat interface allows you to send notes to yourself, keeping track of important information and reminders.', '2023-08-03 09:13:47', 4),
+(30, 'It is a convenient way to jot down thoughts, ideas, and to-dos in a secure and private manner.', '2023-08-03 09:14:16', 4),
+(32, 'Share the chat interface with others to enable collaboration and seamless communication.', '2023-08-03 09:15:13', 4),
+(33, '30 MOST POPULAR MOVIES RIGHT NOW: WHAT TO WATCH IN THEATERS AND STREAMING', '2023-08-03 09:19:55', 8),
+(34, ', Mission: Impossible - Dead Reckoning Part One', '2023-08-03 09:20:52', 8),
+(35, 'Oppenheimer', '2023-08-03 09:21:01', 8),
+(36, 'Barbie 2023', '2023-08-03 11:20:40', 8),
+(38, '&quot;Dear Journal&quot;', '2023-08-03 09:26:41', 10),
+(39, '&quot;How can I work to solve any problems that may have been troubling me when I wrote this entry?&quot;', '2023-08-03 09:27:27', 10),
+(42, 'Muthal muraiyaha en thozhi Ennai ninaithu alugiral..? Elunthu thudaika ninaikiraen Naan iranthu kidakkiraen Enpathaum maranthu..', '2023-08-03 09:31:54', 11),
+(43, 'Theyvai Pen suthanthiram Mugam theriyatha oruvanukku Coffee koduthu Avanai muzuthai Paarkka mudiyatha Sogathil thirumbi Nadakkiral...! Avalin Kanavugalai Thindruvittu Veadikkai Parkiradhu Oru Kuuttam...! Theyvai pen suthanthiram....!', '2023-08-03 09:33:40', 11),
+(44, 'Fly in a hot air balloon over Cappadocia', '2023-08-03 09:35:44', 9),
+(45, 'Kiss under the Eiffel Tower', '2023-08-03 09:36:13', 9),
+(46, 'Visit The White House', '2023-08-03 09:36:59', 9),
+(47, 'Explore the sheer scale of Iguasso Falls', '2023-08-03 09:37:10', 9),
+(48, 'Travel back in time on Easter Island', '2023-08-03 09:37:24', 9),
+(49, '123 means &quot;I Agree&quot;', '2023-08-03 09:40:36', 5),
+(50, 'Represents home and self-sufficient family', '2023-08-03 09:41:02', 5),
+(51, 'Rooted in growth, symbol of recognition from your guardian angels that should instill confidence in your next phase of life', '2023-08-03 09:41:39', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `events`
+--
+
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Active, 0=Block'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `title`, `date`, `created`, `modified`, `status`) VALUES
+(1, 'my birthday', '2023-08-01', '2023-07-26 12:25:54', '2023-07-26 12:25:54', 1),
+(2, 'my birthday', '2023-08-01', '2023-07-26 12:25:56', '2023-07-26 12:25:56', 1),
+(3, 'akka birthday', '2023-11-25', '2023-07-29 17:09:30', '2023-07-29 17:09:30', 1),
+(4, 'ikjuhgf', '2023-09-04', '2023-08-03 08:11:06', '2023-08-03 08:11:06', 1),
+(5, 'ikjuhgf', '2023-09-04', '2023-08-03 08:11:08', '2023-08-03 08:11:08', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedback`
+--
+
+CREATE TABLE `feedback` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `improvements` text DEFAULT NULL,
+  `experience` text DEFAULT NULL,
+  `positives` text DEFAULT NULL,
+  `negatives` text DEFAULT NULL,
+  `rating` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `imageupload`
+--
+
+CREATE TABLE `imageupload` (
+  `f_id` int(11) NOT NULL,
+  `image` blob NOT NULL,
+  `title` varchar(30) NOT NULL,
+  `des` varchar(70) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `imageupload`
+--
+
+INSERT INTO `imageupload` (`f_id`, `image`, `title`, `des`, `user_id`) VALUES
+(1, 0x696d6167652f646f776e6c6f6164202831292e6a7067, 'html code', 'first html code', 1),
+(2, 0x696d6167652f646f776e6c6f6164202832292e6a7067, 'pencil', 'wallpaper', 1),
+(3, 0x696d6167652f4131202d20436f70792e706e67, 'sdfghj', 'sdfghjkl', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notes`
+--
+
+CREATE TABLE `notes` (
+  `draw_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `drawing` mediumtext NOT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notes_table`
+--
+
+CREATE TABLE `notes_table` (
+  `note_id` int(11) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notes_table`
+--
+
+INSERT INTO `notes_table` (`note_id`, `title`, `description`, `user_id`) VALUES
+(3, 'akash', 'about me', 2),
+(4, 'notestoself', 'adpproject', 1),
+(5, '123', '321', 1),
+(6, '0ne', '1', 1),
+(7, 'anusha', 'about', 3),
+(8, 'To Read / Watch', 'read/watch', 1),
+(9, 'Bucket list', '???', 1),
+(10, 'Daily journal', 'journal', 1),
+(11, 'kavithai', 'kavithai', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_user`
+--
+
+CREATE TABLE `tb_user` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `username` varchar(25) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(75) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+INSERT INTO `tb_user` (`id`, `name`, `username`, `email`, `password`) VALUES
+(1, 'Notes to Self', 'notestoself', 'notetoself@gmail.com', '123@Notets'),
+(2, 'akash', 'akash', 'akash@gmail.com', '123@Akash'),
+(3, 'anusha', 'anusha', 'anusha@gmail.com', '123@Anusha');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `todo_list`
+--
+
+CREATE TABLE `todo_list` (
+  `id` int(11) NOT NULL,
+  `task` varchar(255) NOT NULL,
+  `completed` tinyint(1) DEFAULT 0,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `todo_list`
+--
+
+INSERT INTO `todo_list` (`id`, `task`, `completed`, `user_id`) VALUES
+(2, 'adp project', 0, 2),
+(17, 'note to self', 1, 1);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `audio_records`
+--
+ALTER TABLE `audio_records`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `chat_messages`
+--
+ALTER TABLE `chat_messages`
+  ADD PRIMARY KEY (`message_id`),
+  ADD KEY `note_id` (`note_id`);
+
+--
+-- Indexes for table `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `imageupload`
+--
+ALTER TABLE `imageupload`
+  ADD PRIMARY KEY (`f_id`);
+
+--
+-- Indexes for table `notes`
+--
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`draw_id`);
+
+--
+-- Indexes for table `notes_table`
+--
+ALTER TABLE `notes_table`
+  ADD PRIMARY KEY (`note_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `todo_list`
+--
+ALTER TABLE `todo_list`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `audio_records`
+--
+ALTER TABLE `audio_records`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `chat_messages`
+--
+ALTER TABLE `chat_messages`
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+
+--
+-- AUTO_INCREMENT for table `events`
+--
+ALTER TABLE `events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `feedback`
+--
+ALTER TABLE `feedback`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `imageupload`
+--
+ALTER TABLE `imageupload`
+  MODIFY `f_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `notes`
+--
+ALTER TABLE `notes`
+  MODIFY `draw_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `notes_table`
+--
+ALTER TABLE `notes_table`
+  MODIFY `note_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `todo_list`
+--
+ALTER TABLE `todo_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `chat_messages`
+--
+ALTER TABLE `chat_messages`
+  ADD CONSTRAINT `chat_messages_ibfk_1` FOREIGN KEY (`note_id`) REFERENCES `notes_table` (`note_id`);
+
+--
+-- Constraints for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`id`);
+
+--
+-- Constraints for table `notes_table`
+--
+ALTER TABLE `notes_table`
+  ADD CONSTRAINT `notes_table_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`id`);
+
+--
+-- Constraints for table `todo_list`
+--
+ALTER TABLE `todo_list`
+  ADD CONSTRAINT `todo_list_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>draw</title>
+</head>
+<style>
+.note-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#noteTitle {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#drawingCanvas {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: crosshair;
+}
+
+#saveButton,
+#clearButton,#eraseButton {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #0e0f0e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#clearButton {
+  background-color: #100f0f;
+}
+
+#saveButton:hover,
+#clearButton:hover {
+  background-color: #474747;
+}
+
+#drawingCanvas:hover {
+  border-color: #3e3e3e;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.color-picker {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.color-picker button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.color-picker button:hover {
+  transform: scale(1.1);
+}
+
+.color-picker button.selected {
+  transform: scale(1.5);
+}
+
+#penThickness,#eraserThickness {
+  margin-bottom: 10px;
+}
+
+#penThickness input[type="range"],#eraserThickness input[type="range"]{
+  width: 100%;
+}
+
+#penThickness label,#eraserThickness label {
+  display: inline-block;
+  font-size: 14px;
+}
+
+.undo-redo-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.undo-redo-buttons button {
+  padding: 8px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.undo-redo-buttons button:hover {
+  background-color: #ddd;
+}
+
+</style>
+<body>
+    <div class="note-container">
+        <input id="noteTitle" type="text" placeholder="Note Title" required>
+        <div class="color-picker">
+            <button id="colorRed" style="background-color: red;"></button>
+            <button id="colorGreen" style="background-color: green;"></button>
+            <button id="colorBlue" style="background-color: blue;"></button>
+            <button id="colorYellow" style="background-color: yellow;"></button>
+            <button id="colorBlack" style="background-color: black;"></button>
+            <button id="colorWhite" style="background-color: white; border: 1px solid #ccc;"></button>
+        </div>
+        <div id="penThickness">
+            <label for="penRange">Pen Thickness:</label>
+            <input type="range" id="penRange" min="1" max="10" step="1">
+        </div>
+        <div id="eraserThickness">
+            <label for="eraserRange">Eraser Thickness:</label>
+            <input type="range" id="eraserRange" min="1" max="10" step="1">
+        </div>
+        <canvas id="drawingCanvas"></canvas>
+        <div class="undo-redo-buttons">
+            <button id="undoButton" disabled>Undo</button>
+            <button id="redoButton" disabled>Redo</button>
+        </div>
+        <button id="saveButton">Save</button>
+        <button id="clearButton">Clear</button>
+        <button id="eraseButton">Erase</button>
+    </div>
+</body>
+<script>
+    const canvas = document.getElementById('drawingCanvas');
+const context = canvas.getContext('2d');
+let isDrawing = false;
+let isErasing = false;
+let lastX = 0;
+let lastY = 0;
+let penColor = 'black';
+let penThickness = 1;
+let eraserThickness = 1;
+let drawingHistory = [];
+let historyIndex = -1;
+
+canvas.width = 795;
+canvas.height = 600;
+
+function startDrawing(e) {
+  isDrawing = true;
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+  saveState();
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  context.beginPath();
+  context.moveTo(lastX, lastY);
+  context.lineTo(e.offsetX, e.offsetY);
+  context.strokeStyle = isErasing ? 'white' : penColor;
+  context.lineWidth = isErasing ? eraserThickness : penThickness;
+  context.stroke();
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+}
+
+function stopDrawing() {
+  isDrawing = false;
+}
+
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+const colorButtons = document.querySelectorAll('.color-picker button');
+colorButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    penColor = this.style.backgroundColor;
+    resetSelectedColor();
+    this.classList.add('selected');
+  });
+});
+
+function resetSelectedColor() {
+  colorButtons.forEach(button => {
+    button.classList.remove('selected');
+  });
+}
+
+document.getElementById('penRange').addEventListener('input', function() {
+  penThickness = this.value;
+});
+
+document.getElementById('eraserRange').addEventListener('input', function() {
+  eraserThickness = this.value;
+});
+
+document.getElementById('eraseButton').addEventListener('click', function() {
+  isErasing = !isErasing;
+  if (isErasing) {
+    document.getElementById('eraseButton').textContent = 'Drawing';
+  } else {
+    document.getElementById('eraseButton').textContent = 'Erase';
+  }
+});
+
+document.getElementById('undoButton').addEventListener('click', function() {
+  if (historyIndex > 0) {
+    historyIndex--;
+    redraw();
+  }
+  updateUndoRedoButtons();
+});
+
+document.getElementById('redoButton').addEventListener('click', function() {
+  if (historyIndex < drawingHistory.length - 1) {
+    historyIndex++;
+    redraw();
+  }
+  updateUndoRedoButtons();
+});
+
+document.getElementById('clearButton').addEventListener('click', function() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawingHistory = [];
+  historyIndex = -1;
+  updateUndoRedoButtons();
+});
+
+function saveState() {
+  if (historyIndex < drawingHistory.length - 1) {
+    drawingHistory.splice(historyIndex + 1);
+  }
+  drawingHistory.push(canvas.toDataURL());
+  historyIndex++;
+  updateUndoRedoButtons();
+}
+
+function redraw() {
+  const image = new Image();
+  image.src = drawingHistory[historyIndex];
+  image.onload = function() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0);
+  };
+}
+
+function updateUndoRedoButtons() {
+  document.getElementById('undoButton').disabled = historyIndex === 0;
+  document.getElementById('redoButton').disabled = historyIndex === drawingHistory.length - 1;
+}
+
+const saveButton = document.getElementById('saveButton');
+saveButton.addEventListener('click', saveNote);
+
+function saveNote() {
+  const noteTitle = document.getElementById('noteTitle').value;
+  if (drawingHistory.length === 0) {
+    alert('Please draw on the canvas before saving.');
+    return;
+  }
+  if (noteTitle.trim() === '') {
+    alert('Please enter a note title.');
+    return;
+  }
+
+  const drawingData = canvas.toDataURL(); 
+
+  const noteData = {
+    title: noteTitle,
+    drawing: drawingData,
+  };
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'save_note.php', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('Note saved!');
+        resetCanvas();
+      } else {
+        alert('Error saving note.');
+      }
+    }
+  };
+  xhr.send(JSON.stringify(noteData));
+}
+
+function resetCanvas() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawingHistory = [];
+  historyIndex = -1;
+  document.getElementById('noteTitle').value = '';
+  updateUndoRedoButtons();
+}
+
+</script>
+</html>

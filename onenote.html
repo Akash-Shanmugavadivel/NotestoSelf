@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notes Making App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    
+    .editor {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+     .toolbar button i {
+    font-size: 16px;
+  }
+
+  /* Add spacing between the buttons */
+  .toolbar button {
+    margin-right: 5px;
+  }
+
+  /* Style the note title input */
+  .note-title {
+    /* ... Existing styles ... */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  /* Style the note content area */
+  .note {
+    /* ... Existing styles ... */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6; /* Add line height to improve readability */
+  }
+
+  /* Add a border and box-shadow to the note content area when focused */
+  .note:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 3px #007bff;
+  }
+
+  /* Style the links in the note content */
+  .note a {
+    color: #007bff;
+    text-decoration: underline;
+  }
+
+  /* ... Existing styles ... */
+
+  /* Add styles for the toggle dark mode button */
+  .toolbar button.dark-mode {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+  }
+
+  /* Style the line numbers container */
+  .line-numbers {
+    float: left;
+    text-align: right;
+    margin-right: 10px;
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  /* ... Existing styles ... */
+
+  /* Additional styles for the toggle dark mode button when dark mode is active */
+  body.dark-mode .toolbar button.dark-mode {
+    color: #343a40;
+    background-color: #fff;
+  }
+
+  /* Additional styles for the dark mode */
+  body.dark-mode {
+    background-color: #343a40;
+    color: #fff;
+  }
+
+
+    /* Style the font family and font size dropdowns */
+    #font-family,
+    #font-size {
+      margin-right: 10px;
+    }
+
+    /* Style the notes title input */
+    .note-title {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Style the note content area */
+    .note {
+      border: 1px solid #ccc;
+      min-height: 200px;
+      padding: 10px;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Add a focus outline to the note content area */
+    .note:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 3px #007bff;
+    }
+
+    /* Style links in the note content */
+    .note a {
+      color: #007bff;
+      text-decoration: underline;
+    }
+
+    /* Style checkboxes in the note content */
+    .note input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .toolbar button {
+    /* ... Existing button styles ... */
+    background-color: #fff; /* Set the background color for the buttons */
+    color: #343a40; /* Set the text color for the buttons */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  /* Style the toggle dark mode button */
+  .toolbar button.dark-mode {
+    background-color: #343a40;
+    color: #fff;
+  }
+
+  /* Style the font family and font size dropdowns */
+  #font-family,
+  #font-size {
+    margin-right: 10px;
+    background-color: #fff; /* Set the background color for the dropdowns */
+    color: #343a40; /* Set the text color for the dropdowns */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+  }
+
+  /* Style the notes title input */
+  .note-title {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #fff; /* Set the background color for the text box */
+    color: #343a40; /* Set the text color for the text box */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  /* Style the note content area */
+  .note {
+    border: 1px solid #ccc;
+    min-height: 200px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    background-color: #fff; /* Set the background color for the text box */
+    color: #343a40; /* Set the text color for the text box */
+  }
+
+  /* Style selected text background color */
+  ::selection {
+    background-color: #007bff;
+    color: #fff;
+  }
+  </style>
+</head>
+<body>
+  <div class="editor">
+    <div class="toolbar">
+       <button onclick="toggleFormat('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+      <button onclick="toggleFormat('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+      <button onclick="toggleFormat('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+      <button onclick="toggleFormat('strikeThrough')" title="Strike Through"><i class="fas fa-strikethrough"></i></button>
+      <button onclick="insertList('unordered')" title="Unordered List"><i class="fas fa-list-ul"></i></button>
+      <button onclick="insertList('ordered')" title="Ordered List"><i class="fas fa-list-ol"></i></button>
+      <button onclick="addLink()" title="Add Link"><i class="fas fa-link"></i></button>
+      <button onclick="addCheckbox()" title="Add Checkbox"><i class="far fa-check-square"></i></button>
+      <button onclick="clearAll()" title="Clear All"><i class="fas fa-trash-alt"></i></button>
+      <button onclick="undo()" title="Undo"><i class="fas fa-undo"></i></button>
+      <button onclick="redo()" title="Redo"><i class="fas fa-redo"></i></button>
+      <button onclick="saveNotes()" title="Save Notes"><i class="fas fa-save"></i></button>
+      <button onclick="loadNotes()" title="Load Notes"><i class="fas fa-file-import"></i></button>
+      <button onclick="clearFormatting()" title="Clear Formatting"><i class="fas fa-eraser"></i></button>
+      <button onclick="printDocument()" title="Print"><i class="fas fa-print"></i></button>
+      <button onclick="toggleWordWrap()" title="Word Wrap"><i class="fas fa-text-width"></i></button>
+      <button onclick="toggleLineNumbers()" title="Line Numbers"><i class="fas fa-sort-numeric-up"></i></button>
+      <button onclick="togglePrintMargin()" title="Print Margin"><i class="fas fa-ruler-horizontal"></i></button>
+      <button onclick="toggleTabMode()" title="Tab Mode"><i class="fas fa-indent"></i></button>
+      <button onclick="changeFontSizeCycle()" title="Font Size Cycle"><i class="fas fa-text-height"></i></button>
+      <button onclick="findAndReplace()" title="Find and Replace"><i class="fas fa-search"></i></button>
+      <button onclick="goToLine()" title="Go to Line"><i class="fas fa-grip-lines"></i></button>
+      <button onclick="downloadFile()" title="Download"><i class="fas fa-download"></i></button>
+      <button onclick="openInDrive()" title="Open in Drive"><i class="fab fa-google-drive"></i></button>
+      <button onclick="highlightText()" title="Highlight"><i class="fas fa-highlighter"></i></button>
+
+      <label for="font-family">Select Font Family:</label>
+            <select id="font-family" onchange="changeFontFamily()">
+        <option value="Arial, sans-serif">Arial, sans-serif</option>
+        <option value="Times New Roman, serif">Times New Roman, serif</option>
+        <option value="Roboto, sans-serif">Roboto, sans-serif</option>
+        <option value="Georgia, serif">Georgia, serif</option>
+        <option value="Courier New, monospace">Courier New, monospace</option>
+        <option value="Verdana, sans-serif">Verdana, sans-serif</option>
+        <!-- Add more font family options here -->
+      </select>
+
+      <label for="font-size">Select Font Size:</label>
+      <select id="font-size" onchange="changeFontSize()">
+        <option value="12px">12px</option>
+        <option value="14px">14px</option>
+        <option value="16px">16px</option>
+        <!-- Add more font size options here -->
+      </select>
+
+    <!-- Toggle dark mode button -->
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+    <input type="text" class="note-title" placeholder="Enter a title">
+    <div class="note" contenteditable="true"></div>
+  </div>
+
+  <script>
+    function toggleFormat(command) {
+    document.execCommand(command, false, null);
+  }
+
+  function insertList(listType) {
+    if (listType === 'unordered') {
+      document.execCommand('insertUnorderedList', false, null);
+    } else if (listType === 'ordered') {
+      document.execCommand('insertOrderedList', false, null);
+    }
+  }    
+
+    function addLink() {
+      const url = prompt('Enter the URL:');
+      if (url) {
+        document.execCommand('createLink', false, url);
+      }
+    }
+
+    function addCheckbox() {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.addEventListener('click', function (event) {
+        event.stopPropagation(); // Prevent checkbox click from being caught by the parent div
+      });
+      const selection = window.getSelection();
+      if (selection.rangeCount) {
+        const range = selection.getRangeAt(0);
+        range.insertNode(checkbox);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+
+    function changeFontSize() {
+      const fontSize = document.getElementById('font-size').value;
+      const note = document.querySelector('.note');
+      note.style.fontSize = fontSize;
+    }
+
+    function clearAll() {
+      const note = document.querySelector('.note');
+      note.innerHTML = ''; // Clear the content of the note
+    }
+
+    function changeTextColor(event) {
+      const color = event.target.value;
+      document.execCommand('foreColor', false, color);
+    }
+
+    function changeBgColor(event) {
+      const color = event.target.value;
+      document.execCommand('backColor', false, color);
+    }
+
+    function undo() {
+      document.execCommand('undo', false, null);
+    }
+
+    function redo() {
+      document.execCommand('redo', false, null);
+    }
+
+    function saveNotes() {
+      const noteContent = document.querySelector('.note').innerHTML;
+      localStorage.setItem('savedNote', noteContent);
+    }
+
+    function loadNotes() {
+      const savedNote = localStorage.getItem('savedNote');
+      if (savedNote) {
+        document.querySelector('.note').innerHTML = savedNote;
+      }
+    }
+
+    // Define a function to set the font family
+    function changeFontFamily() {
+      const fontFamily = document.getElementById('font-family').value;
+      const note = document.querySelector('.note');
+      note.style.fontFamily = fontFamily;
+    }
+
+    // Call the updateTitle() function when the title input changes
+    document.querySelector('.note-title').addEventListener('input', updateTitle);
+
+    // Rest of the existing functions...
+
+    // Set initial font family and font size
+    changeFontFamily();
+    changeFontSize();
+
+    function toggleWordWrap() {
+      const note = document.querySelector('.note');
+      const currentWhiteSpace = note.style.whiteSpace || 'normal';
+
+      if (currentWhiteSpace === 'normal') {
+        // Enable word wrap
+        note.style.whiteSpace = 'pre-wrap';
+      } else {
+        // Disable word wrap
+        note.style.whiteSpace = 'normal';
+      }
+    }
+
+
+  function toggleLineNumbers() {
+    const note = document.querySelector('.note');
+    const lineNumbersContainer = document.querySelector('.line-numbers');
+
+    if (lineNumbersContainer) {
+      // Line numbers are already displayed, so remove them
+      lineNumbersContainer.remove();
+    } else {
+      // Line numbers are not displayed, so add them
+      const lines = note.textContent.split('\n');
+      const lineNumbers = lines.map((_, index) => `<div class="line-number">${index + 1}</div>`).join('');
+      const lineNumbersWrapper = document.createElement('div');
+      lineNumbersWrapper.classList.add('line-numbers');
+      lineNumbersWrapper.innerHTML = lineNumbers;
+      note.parentNode.insertBefore(lineNumbersWrapper, note);
+    }
+  }
+
+    function updateLineNumbers() {
+      const note = document.querySelector('.note');
+      const lineNumbersContainer = document.querySelector('.line-numbers');
+
+      // Split the note content into individual lines
+      const lines = note.textContent.split('\n');
+
+      // Generate the line number HTML
+      const lineNumberHTML = lines.map((_, index) => `<div class="line-number">${index + 1}</div>`).join('');
+
+      // Set the line numbers in the line numbers container
+      lineNumbersContainer.innerHTML = lineNumberHTML;
+    }
+
+   
+  function updateLineNumbers() {
+    const note = document.querySelector('.note');
+    const lineNumbersContainer = document.querySelector('.line-numbers');
+
+    // Split the note content into individual lines
+    const lines = note.textContent.split('\n');
+
+    // Generate the line number HTML
+    const lineNumberHTML = lines.map((_, index) => `<div class="line-number">${index + 1}</div>`).join('');
+
+    // Set the line numbers in the line numbers container
+    lineNumbersContainer.innerHTML = lineNumberHTML;
+
+    // Adjust line numbers when Enter key is pressed
+    note.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        // Update line numbers after a brief delay to ensure the content is updated
+        setTimeout(updateLineNumbers, 10);
+      }
+    });
+  }
+
+    function updatePrintMarginPosition(position) {
+      const printMarginLine = document.querySelector('.print-margin-line');
+      printMarginLine.style.left = position + 'px';
+    }
+
+    let tabMode = 'hard';
+
+    function toggleTabMode() {
+      const note = document.querySelector('.note');
+      const currentTabMode = tabMode;
+
+      // Cycle through tab modes: hard, soft-2, soft-4
+      if (currentTabMode === 'hard') {
+        tabMode = 'soft-2';
+      } else if (currentTabMode === 'soft-2') {
+        tabMode = 'soft-4';
+      } else if (currentTabMode === 'soft-4') {
+        tabMode = 'hard';
+      }
+
+      // Update the note content with the new tab mode
+      updateTabMode();
+    }
+
+    function updateTabMode() {
+      const note = document.querySelector('.note');
+      const content = note.textContent;
+      let updatedContent;
+
+      if (tabMode === 'hard') {
+        // Replace all soft tabs with hard tabs
+        updatedContent = content.replace(/ {2}/g, '\t').replace(/ {4}/g, '\t');
+      } else {
+        // Replace all hard tabs with soft tabs
+        const tabSize = tabMode === 'soft-2' ? 2 : 4;
+        const spaces = ' '.repeat(tabSize);
+        updatedContent = content.replace(/\t/g, spaces);
+      }
+
+      // Update the note content with the new tab mode
+      note.textContent = updatedContent;
+    }
+
+    function changeFontSizeCycle() {
+      const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px', '22px', '24px'];
+      const note = document.querySelector('.note');
+      const currentFontSize = note.style.fontSize || '16px';
+      const currentIndex = fontSizes.indexOf(currentFontSize);
+      const nextIndex = (currentIndex + 1) % fontSizes.length;
+      note.style.fontSize = fontSizes[nextIndex];
+    }
+
+    function findAndReplace() {
+      const searchText = prompt('Enter the text to find:');
+      if (searchText) {
+        const replaceText = prompt('Enter the replacement text:');
+        const content = document.querySelector('.note').innerHTML;
+        const newContent = content.replace(new RegExp(searchText, 'gi'), replaceText);
+        document.querySelector('.note').innerHTML = newContent;
+      }
+    }
+
+ function clearFormatting() {
+    document.execCommand('removeFormat', false, null);
+  }
+    function printDocument() {
+    // Temporarily hide unwanted elements during printing
+    const toolbar = document.querySelector('.toolbar');
+    const lineNumbersContainer = document.querySelector('.line-numbers');
+    const printMarginLine = document.querySelector('.print-margin-line');
+    toolbar.style.display = 'none';
+    if (lineNumbersContainer) {
+      lineNumbersContainer.style.display = 'none';
+    }
+    if (printMarginLine) {
+      printMarginLine.style.display = 'none';
+    }
+
+    // Print the document
+    window.print();
+
+    // Restore the hidden elements after printing
+    toolbar.style.display = '';
+    if (lineNumbersContainer) {
+      lineNumbersContainer.style.display = '';
+    }
+    if (printMarginLine) {
+      printMarginLine.style.display = '';
+    }
+  }
+    function goToLine() {
+      const lineNumber = prompt('Enter the line number:');
+      if (lineNumber) {
+        const note = document.querySelector('.note');
+        const lines = note.textContent.split('\n');
+        const maxLine = lines.length;
+        const lineNum = parseInt(lineNumber);
+        if (lineNum > 0 && lineNum <= maxLine) {
+          const range = document.createRange();
+          const sel = window.getSelection();
+          range.setStart(note.firstChild, 0);
+          range.collapse(true);
+          for (let i = 0; i < lineNum - 1; i++) {
+            range.setStartAfter(range.endContainer);
+          }
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } else {
+          alert('Invalid line number');
+        }
+      }
+    }
+
+    function downloadFile() {
+    const noteTitle = document.querySelector('.note-title').value; // Get the note title
+    const noteContent = document.querySelector('.note').textContent; // Get the note content
+
+    if (!noteTitle.trim()) {
+      alert('Please enter a title before saving.');
+      return;
+    }
+
+    const blob = new Blob([noteContent], { type: 'text/plain' }); // Create a Blob with the note content
+    const url = URL.createObjectURL(blob); // Create a URL for the Blob
+    const a = document.createElement('a'); // Create a link element
+    a.href = url; // Set the link URL to the Blob URL
+    a.download = `${noteTitle}.txt`; // Set the download attribute with the note title as the file name
+    document.body.appendChild(a); // Append the link element to the document
+    a.click(); // Click the link to trigger the download
+    document.body.removeChild(a); // Remove the link element from the document after the download is initiated
+    URL.revokeObjectURL(url); // Revoke the Blob URL to free up resources
+  }
+     function openInDrive() {
+      const noteContent = document.querySelector('.note').textContent;
+      const blob = new Blob([noteContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+
+      // Create an anchor element to generate a download link
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'notes.txt';
+      document.body.appendChild(a);
+
+      // Simulate a click on the anchor element to trigger the download
+      a.click();
+
+      // Remove the anchor element
+      document.body.removeChild(a);
+
+      // Revoke the object URL to free up resources
+      URL.revokeObjectURL(url);
+
+      // After downloading the notes as a file, the user can manually open it in Google Drive
+      alert('Notes saved as "notes.txt". You can open this file in Google Drive.');
+    }
+
+    // Rest of the existing functions...
+
+    // Call the updateTitle() function when the title input changes
+    document.querySelector('.note-title').addEventListener('input', updateTitle);
+
+    // Set initial font family and font size
+    changeFontFamily();
+    changeFontSize();
+    
+    function highlightText() {
+      const selection = window.getSelection();
+      if (!selection.isCollapsed) {
+        document.execCommand('hiliteColor', false, '#ffff00'); // Yellow highlight color
+      }
+    }
+
+    // Toggle dark mode functionality
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+    }
+
+    // Auto-save functionality
+    setInterval(saveNotes, 5000); // Save notes every 5 seconds (adjust as needed)
+
+    // Markdown support functionality
+    function parseMarkdown() {
+      const noteContent = document.querySelector('.note');
+      noteContent.innerHTML = marked(noteContent.innerHTML);
+    }
+
+    // Load notes and update line numbers on page load
+    window.addEventListener('load', function () {
+      loadNotes();
+      updateLineNumbers();
+      parseMarkdown();
+    });
+  </script>
+</body>
+</html>

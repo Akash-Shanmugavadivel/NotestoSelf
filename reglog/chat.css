@@ -1,0 +1,241 @@
+        body {
+              font-family: Arial, sans-serif;
+              background-color: #f2f2f2;
+              margin: 0;
+              padding: 0;
+            }
+            
+        .light-mode {
+          background-color: #f2f2f2;
+          color: #333;
+        }
+        .light-mode .container {
+          background-color: #fff;
+        }
+        .light-mode .theme {
+          background-color: #fff;
+          color: black;
+        }
+        .dark-mode .pin-others {
+          background-color: #fff;
+          color: black;
+        }
+        .dark-mode {
+          background-color: #333;
+          color:white;
+        }
+        .dark-mode .container {
+          background-color: #222;
+        }
+        .dark-mode .theme {
+          background-color: #222;
+          color: white;
+        }
+        .light-mode .pin-others{
+          background-color: #222;
+          color: white;
+        }
+    .container {
+   width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .chat-box {
+      height: 500px;
+      max-height: 700px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      text-align: right;
+      background-color: rgba(211, 211, 211, 0.5);
+    }
+    
+    .chat-message {
+      margin-bottom: 10px;
+      position: relative;
+  }
+  .chat-message .time {
+      font-size: 12px;
+      color: #888;
+  }
+  .chat-message .actions {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+  }
+  .chat-message .actions button {
+      padding: 0;
+      border: none;
+      background: none;
+      color: #888;
+      font-size: 12px;
+      cursor: pointer;
+  }
+    .chat-message .time {
+      font-size: 12px;
+      color: black;
+      margin-top: 4px;
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .input-container textarea {
+      flex: 1;
+      resize: vertical;
+      padding: 10px;
+      width:700px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: height 0.3s;
+      background-color: #f2f2f2;
+      height: 30px;
+      max-height: 70px;
+    }
+    
+    .input-container .sendnote{
+      padding: 10px;
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .input-container .sendimg{
+      padding: 7px;
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .input-container button:hover {
+      background-color: #0056b3;
+    }
+    select{
+      padding: 7px;
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button,input[type="submit"]{
+      padding: 7px;
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .chat-box {
+  background-color: #fcfcfe;
+  background-image: url("bg-img-1.jpg");
+}
+.theme{
+  position: absolute;
+  border-radius: 5px;
+  top: 20px;
+  right: 20px;
+  width: 75px;
+  height: 30px;
+}
+.pin-others {
+      color: black;
+      width: 200px;
+      height: 100px;
+      position: fixed;
+      float:right;
+      top: 0;
+      right: -200px;
+      transition:left 0.4s ease;
+    }
+    .pin-others ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .pin-others li {
+      padding: 10px;
+    }
+
+    .pin-others.active {
+      left: 0;
+    }
+
+    
+ .newnote-add{
+  text-decoration: none;
+  color:white;
+  font-size: 18px;
+  padding: 10px;
+}
+.newnote{
+  position: absolute;
+  top: 125px;
+  right: 20px;
+  
+}
+.newnote-btn:hover{
+  background-color: rgb(1, 1, 100);
+}
+.newnote-btn{
+  width: 150px;
+  height: 45px;
+  background-color:black;
+  border: none;
+  border-radius: 2px;
+}
+.print-button:hover{
+  background-color: rgb(1, 1, 100);
+}
+.print-button{
+  width: 150px;
+  height: 45px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color:black;
+  border: none;
+  border-radius: 2px;
+}
+.toggle{
+  width: 150px;
+  height: 45px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color:black;
+  border: none;
+  border-radius: 2px;
+}

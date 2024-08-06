@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reminders and Notifications</title>
+    <style>
+        :root {
+                    --background-color: #f9f9f9;
+                    --text-color: #333;
+                }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .note {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="submit"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #notesContainer {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .theme-switcher {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .theme-switcher button {
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+
+        }
+
+        .theme-switcher button.light-mode {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .theme-switcher button:hover {
+         filter: brightness(1.2);
+        }
+
+        .theme-switcher button.dark-mode {
+            background-color: #333;
+            color: #f9f9f9;
+        }
+      .theme-switcher button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Reminders and Notifications</h1>
+
+    <div class="theme-switcher">
+        <button class="light-mode">Light Mode</button>
+        <button class="dark-mode">Dark Mode</button>
+    </div>
+    <div>
+        <h2>Add Note</h2>
+        <form id="noteForm">
+            <label for="noteText">Note:</label>
+            <input type="text" id="noteText" required>
+            <br>
+            <label for="reminderTime">Reminder Time:</label>
+            <input type="datetime-local" id="reminderTime" required>
+            <br>
+            <input type="submit" value="Add Note">
+        </form>
+    </div>
+
+    <div id="notesContainer">
+        <h2>Notes</h2>
+        <div id="notesList"></div>
+    </div>
+
+    <script>
+        document.getElementById('noteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get the note text and reminder time
+            const noteText = document.getElementById('noteText').value;
+            const reminderTime = document.getElementById('reminderTime').value;
+
+            // Create a new note object
+            const note = {
+                text: noteText,
+                reminder: reminderTime
+            };
+
+            // Save the note to local storage or send to server for further processing
+            saveNoteToLocalStorage(note);
+
+            // Clear the form inputs
+            document.getElementById('noteText').value = '';
+            document.getElementById('reminderTime').value = '';
+
+            // Display the note in the list
+            displayNoteInList(note);
+             // Show an alert message
+            showAlert('Reminder added successfully!');
+        });
+        function showAlert(message) {
+             alert(message);
+}           
+function scheduleReminderCheck() {
+    setInterval(function() {
+        checkReminders();
+    }, 60000); // Check every minute (adjust as needed)
+}
+
+function checkReminders() {
+    const currentTime = new Date().getTime();
+    const notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+    notes.forEach(function(note) {
+        const reminderTime = new Date(note.reminder).getTime();
+        if (currentTime <=0) {
+            showAlert('Reminder: ' + note.text);
+        }
+    });
+}
+
+// Call the scheduleReminderCheck function to start periodic reminder checks
+scheduleReminderCheck();    
+        function saveNoteToLocalStorage(note) {
+            // Retrieve existing notes from local storage
+            let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+            // Add the new note to the array
+            notes.push(note);
+
+            // Save the updated notes array to local storage
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        function displayNoteInList(note) {
+            const notesList = document.getElementById('notesList');
+
+            // Create a new note element
+            const noteElement = document.createElement('div');
+            noteElement.classList.add('note');
+
+            // Set the inner HTML of the note element
+            noteElement.innerHTML = `
+                <p><strong>Note:</strong> ${note.text}</p>
+                <p><strong>Reminder Time:</strong> ${note.reminder}</p>
+                <button class="delete-button">Delete</button>
+            `;
+
+            // Append the note element to the notes list
+            notesList.appendChild(noteElement);
+            
+          // Add a click event listener to the delete button
+            const deleteButton = noteElement.querySelector('.delete-button');
+            deleteButton.addEventListener('click', function() {
+                deleteNoteFromLocalStorage(note);
+                noteElement.remove();
+            });
+        }
+
+        function deleteNoteFromLocalStorage(note) {
+            let notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes = notes.filter(function(existingNote) {
+                return existingNote.text !== note.text || existingNote.reminder !== note.reminder;
+            });
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+        // Load existing notes from local storage on page load
+        window.addEventListener('load', function() {
+            let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+            // Display each note in the list
+            notes.forEach(function(note) {
+                displayNoteInList(note);
+            });
+        });
+    </script>
+    <script>
+        document.querySelector('.light-mode').addEventListener('click', function() {
+            document.documentElement.style.setProperty('--background-color', '#f9f9f9');
+            document.documentElement.style.setProperty('--text-color', '#333');
+        });
+
+        document.querySelector('.dark-mode').addEventListener('click', function() {
+            document.documentElement.style.setProperty('--background-color', '#333');
+            document.documentElement.style.setProperty('--text-color', '#f9f9f9');
+        });
+    </script>
+</body>
+</html>

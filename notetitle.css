@@ -1,0 +1,93 @@
+
+    .input-container {
+        height: 100px;
+        width: 300px;
+        border: 2px solid white;
+        position: absolute;
+        top: 45%;
+        left: 40%;
+        transform: translate(-50%, -50%);
+    }
+
+    .input-container .notes {
+        padding-left: 55px;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        pointer-events: none;
+        transition: 0.2s all;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .input-container label {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding-left: 40px;
+    }
+
+    .input-container input:focus ~ label,
+    .input-container input:valid ~ label {
+        top: -20px;
+        font-size: 20px;
+        color: black;
+    }
+
+    .input-container input {
+        font-size: 30px;
+        border: none;
+        border-bottom: 2px solid #000;
+        outline: none;
+        width: 100%;
+        padding: 10px 0;
+        font-size: 16px;
+        transition: 0.2s border-color;
+    }
+
+    .input-container input:focus {
+        border-bottom-color: black;
+    }
+
+    .input-container .input-line {
+        position: relative;
+        height: 1px;
+        background: #000;
+    }
+
+    .input-container .input-line::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        width: 50%;
+        height: 1px;
+        background: #fff;
+        transition: 0.2s all;
+    }
+
+    .input-container input:focus ~ .input-line::after {
+        width: 100%;
+    }
+
+    button{
+        background-color: black;
+        color: white;
+        font-size: 18px;
+        padding: 10px 4px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+    input[type="submit"] {
+        background-color: black;
+        color: white;
+        font-size: 18px;
+        padding: 10px 4px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+    a{
+        text-decoration: none;
+        color: white;
+    }
